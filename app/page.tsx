@@ -26,6 +26,7 @@ type FieldErrors = Record<string, string>;
 
 export default function Home() {
   const [processCount, setProcessCount] = useState<number>(3);
+  const [processCountInput, setProcessCountInput] = useState<string>("3");
   const [processData, setProcessData] = useState<ProcessInput[]>(defaultSample);
   const [algorithm, setAlgorithm] = useState<ApiAlgorithm>("RECOMMENDED");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
@@ -46,7 +47,9 @@ export default function Home() {
 
   function validateFrontend(): { ok: true } | { ok: false; errors: FieldErrors } {
     const errors: FieldErrors = {};
-    if (!Number.isFinite(processCount) || processCount < 1) {
+    if (processCountInput.trim() === "") {
+      errors.processCount = "Please enter the number of processes.";
+    } else if (!Number.isFinite(processCount) || processCount < 1) {
       errors.processCount = "Number of processes must be at least 1.";
     }
 
@@ -57,7 +60,7 @@ export default function Home() {
     return { ok: true };
   }
 
-  async function runSimulation() {
+  async function runSimulation(overrideAlgorithm?: ApiAlgorithm) {
     setApiError(null);
     const v = validateFrontend();
     if (!v.ok) {
@@ -69,10 +72,11 @@ export default function Home() {
     setFieldErrors({});
     setIsRunning(true);
     try {
+      const chosenAlgorithm = overrideAlgorithm ?? algorithm;
       const res = await fetch("/api/simulate", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ processData: safeProcessData, algorithm }),
+        body: JSON.stringify({ processData: safeProcessData, algorithm: chosenAlgorithm }),
       });
 
       if (!res.ok) {
@@ -98,6 +102,7 @@ export default function Home() {
 
   function resetAll() {
     setProcessCount(3);
+    setProcessCountInput("3");
     setProcessData(defaultSample);
     setAlgorithm("RECOMMENDED");
     setFieldErrors({});
@@ -112,15 +117,34 @@ export default function Home() {
         <div className="flex justify-center">
           <div className="w-full max-w-3xl">
             <ProcessInputForm
-              processCount={processCount}
+              processCountInput={processCountInput}
               processData={safeProcessData}
               algorithm={algorithm}
               fieldErrors={fieldErrors}
               isRunning={isRunning}
-              onProcessCountChange={(n) => {
-                const nextCount = Math.max(1, Math.min(20, Math.floor(Number(n) || 1)));
+              onProcessCountInputChange={(value) => {
+                setProcessCountInput(value);
+                if (value.trim() === "") return;
+                const parsed = Number(value);
+                if (!Number.isFinite(parsed)) return;
+                const nextCount = Math.max(1, Math.min(20, Math.floor(parsed || 1)));
                 setProcessCount(nextCount);
                 setProcessData((cur) => ensureCount(cur, nextCount));
+              }}
+              onProcessCountInputBlur={() => {
+                if (processCountInput.trim() === "") {
+                  setProcessCountInput(String(processCount));
+                } else {
+                  const parsed = Number(processCountInput);
+                  if (Number.isFinite(parsed)) {
+                    const nextCount = Math.max(1, Math.min(20, Math.floor(parsed || 1)));
+                    setProcessCount(nextCount);
+                    setProcessCountInput(String(nextCount));
+                    setProcessData((cur) => ensureCount(cur, nextCount));
+                  } else {
+                    setProcessCountInput(String(processCount));
+                  }
+                }
               }}
               onProcessChange={(idx, next) => {
                 setProcessData((cur) => {
@@ -134,6 +158,7 @@ export default function Home() {
               onReset={resetAll}
               onLoadSample={() => {
                 setProcessCount(3);
+                setProcessCountInput("3");
                 setProcessData(defaultSample);
                 setFieldErrors({});
                 setApiError(null);
@@ -169,7 +194,10 @@ export default function Home() {
                 </div>
                 <ResultPanel
                   algorithm={algorithm}
-                  onAlgorithmChange={(a) => setAlgorithm(a)}
+                  onAlgorithmChange={(a) => {
+                    setAlgorithm(a);
+                    void runSimulation(a);
+                  }}
                   onReset={resetAll}
                   isRunning={isRunning}
                   data={result}

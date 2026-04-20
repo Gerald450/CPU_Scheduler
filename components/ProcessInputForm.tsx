@@ -13,24 +13,26 @@ function inputClass(hasError: boolean) {
 }
 
 export function ProcessInputForm({
-  processCount,
+  processCountInput,
   processData,
   algorithm,
   fieldErrors,
   isRunning,
-  onProcessCountChange,
+  onProcessCountInputChange,
+  onProcessCountInputBlur,
   onProcessChange,
   onAlgorithmChange,
   onRun,
   onReset,
   onLoadSample,
 }: {
-  processCount: number;
+  processCountInput: string;
   processData: ProcessInput[];
   algorithm: ApiAlgorithm;
   fieldErrors: FieldErrors;
   isRunning: boolean;
-  onProcessCountChange: (n: number) => void;
+  onProcessCountInputChange: (value: string) => void;
+  onProcessCountInputBlur: () => void;
   onProcessChange: (idx: number, next: Partial<ProcessInput>) => void;
   onAlgorithmChange: (a: ApiAlgorithm) => void;
   onRun: () => void;
@@ -56,8 +58,9 @@ export function ProcessInputForm({
                 type="number"
                 min={1}
                 max={20}
-                value={processCount}
-                onChange={(e) => onProcessCountChange(Number(e.target.value))}
+                value={processCountInput}
+                onChange={(e) => onProcessCountInputChange(e.target.value)}
+                onBlur={onProcessCountInputBlur}
                 className={inputClass(Boolean(fieldErrors["processCount"]))}
               />
               <button
@@ -111,7 +114,11 @@ export function ProcessInputForm({
                           type="number"
                           min={0}
                           value={Number.isFinite(p.arrivalTime) ? p.arrivalTime : ""}
-                          onChange={(e) => onProcessChange(idx, { arrivalTime: Number(e.target.value) })}
+                          onChange={(e) =>
+                            onProcessChange(idx, {
+                              arrivalTime: e.target.value === "" ? Number.NaN : Number(e.target.value),
+                            })
+                          }
                           className={inputClass(Boolean(atErr))}
                         />
                         {atErr ? <p className="mt-1 text-[11px] font-semibold text-red-600">{atErr}</p> : null}
@@ -122,7 +129,11 @@ export function ProcessInputForm({
                           type="number"
                           min={1}
                           value={Number.isFinite(p.burstTime) ? p.burstTime : ""}
-                          onChange={(e) => onProcessChange(idx, { burstTime: Number(e.target.value) })}
+                          onChange={(e) =>
+                            onProcessChange(idx, {
+                              burstTime: e.target.value === "" ? Number.NaN : Number(e.target.value),
+                            })
+                          }
                           className={inputClass(Boolean(btErr))}
                         />
                         {btErr ? <p className="mt-1 text-[11px] font-semibold text-red-600">{btErr}</p> : null}
