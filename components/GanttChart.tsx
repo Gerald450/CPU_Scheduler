@@ -26,6 +26,9 @@ export function GanttChart({
 }) {
   const endTime = segments.length ? Math.max(...segments.map((s) => s.end)) : 0;
   const total = Math.max(1, endTime);
+  const ticks = Array.from(
+    new Set<number>([0, ...segments.flatMap((s) => [s.start, s.end])].filter((x) => x >= 0)),
+  ).sort((a, b) => a - b);
 
   return (
     <div className="rounded-2xl border border-[color:var(--border)] bg-white shadow-sm overflow-hidden">
@@ -43,9 +46,9 @@ export function GanttChart({
           </div>
         ) : (
           <div className="grid gap-3">
-            <div className="relative w-full overflow-x-auto">
-              <div className="min-w-[720px]">
-                <div className="flex h-14 rounded-xl overflow-hidden border border-[color:var(--border)] bg-white">
+            <div className="relative w-full overflow-x-auto px-3">
+              <div className="min-w-[720px] px-1">
+                <div className="relative flex h-14 rounded-xl overflow-hidden border border-[color:var(--border)] bg-white">
                   {segments.map((s, idx) => {
                     const width = ((s.end - s.start) / total) * 100;
                     const bg = colorForProcess(s.processId);
@@ -76,12 +79,31 @@ export function GanttChart({
                   })}
                 </div>
 
-                <div className="mt-2 flex justify-between text-[11px] font-bold text-[color:var(--muted)]">
-                  <span>0</span>
-                  <span>{Math.floor(total / 4)}</span>
-                  <span>{Math.floor(total / 2)}</span>
-                  <span>{Math.floor((3 * total) / 4)}</span>
-                  <span>{total}</span>
+                <div className="mt-2 relative h-6">
+                  {ticks.map((t) => {
+                    const left = (t / total) * 100;
+                    const isStart = t === 0;
+                    const isEnd = t === total;
+                    return (
+                      <div
+                        key={t}
+                        className={[
+                          "absolute top-0",
+                          isStart ? "translate-x-0" : isEnd ? "-translate-x-full" : "-translate-x-1/2",
+                        ].join(" ")}
+                        style={{ left: `${left}%` }}
+                      >
+                        <div className="h-2 w-px bg-[color:color-mix(in_oklab,var(--primary)_25%,transparent)] mx-auto" />
+                        <div
+                          className={[
+                            "mt-1 text-[11px] font-bold text-[color:var(--muted)]",
+                          ].join(" ")}
+                        >
+                          {t}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 <div className="mt-1 flex justify-between text-[11px] text-[color:var(--muted)]">
