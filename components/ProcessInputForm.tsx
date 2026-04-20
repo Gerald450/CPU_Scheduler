@@ -149,7 +149,7 @@ export function ProcessInputForm({
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={onRun}
+              onClick={() => onRun()}
               disabled={isRunning}
               className="flex-1 rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-extrabold text-white shadow-sm hover:opacity-95 disabled:opacity-60 transition"
             >

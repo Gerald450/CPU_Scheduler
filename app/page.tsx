@@ -73,7 +73,8 @@ export default function Home() {
     setIsRunning(true);
     try {
       const chosenAlgorithm = overrideAlgorithm ?? algorithm;
-      const res = await fetch("/api/simulate", {
+      const url = new URL("/api/simulate", window.location.href);
+      const res = await fetch(url.toString(), {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ processData: safeProcessData, algorithm: chosenAlgorithm }),
@@ -92,8 +93,12 @@ export default function Home() {
 
       const data = (await res.json()) as SimulateResponseBody;
       setResult(data);
-    } catch {
-      setApiError("Network error. Please try again.");
+    } catch (err) {
+      // Fetch throws (instead of returning a Response) on connection errors, aborted requests, etc.
+      const hint = `Make sure the app URL matches the dev server port (you are on ${window.location.origin}).`;
+      const msg = err instanceof Error ? err.message : "Failed to fetch";
+      console.error("Simulation request failed:", err);
+      setApiError(`Network error (${msg}). ${hint}`);
       setResult(null);
     } finally {
       setIsRunning(false);
