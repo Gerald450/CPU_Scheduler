@@ -31,23 +31,21 @@ export function GanttChart({
   ).sort((a, b) => a - b);
 
   return (
-    <div className="rounded-2xl border border-[color:var(--border)] bg-white shadow-sm overflow-hidden">
-      <div className="px-5 py-4 border-b border-[color:var(--border)]">
+    <div className="rounded-2xl border border-[color:var(--border)] bg-white shadow-sm overflow-hidden min-w-0">
+      <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-[color:var(--border)]">
         <h3 className="text-sm font-bold text-[color:var(--primary)]">Gantt Chart</h3>
-        <p className="text-xs text-[color:var(--muted)] mt-1">
-          Visual execution timeline (supports SRTF preemption)
-        </p>
+        <p className="text-xs text-[color:var(--muted)] mt-1">Visual execution timeline</p>
       </div>
 
-      <div className="p-5">
+      <div className="p-3 sm:p-5 min-w-0">
         {segments.length === 0 ? (
           <div className="rounded-xl border border-dashed border-[color:var(--border)] bg-[color:color-mix(in_oklab,var(--primary)_2%,white)] p-6 text-sm text-[color:var(--muted)]">
             Run a simulation to generate the Gantt chart.
           </div>
         ) : (
-          <div className="grid gap-3">
-            <div className="relative w-full overflow-x-auto px-3">
-              <div className="min-w-[720px] px-1">
+          <div className="grid gap-3 min-w-0">
+            <div className="relative w-full max-w-full overflow-x-auto overscroll-x-contain touch-pan-x -mx-1 px-1 sm:mx-0 sm:px-3">
+              <div className="min-w-[min(100%,720px)] sm:min-w-[720px] px-1">
                 <div className="relative flex h-14 rounded-xl overflow-hidden border border-[color:var(--border)] bg-white">
                   {segments.map((s, idx) => {
                     const width = ((s.end - s.start) / total) * 100;
@@ -113,7 +111,7 @@ export function GanttChart({
               </div>
             </div>
 
-            <div className="rounded-xl border border-[color:var(--border)] bg-[color:color-mix(in_oklab,var(--primary)_2%,white)] px-4 py-3 text-xs text-[color:var(--muted)]">
+            <div className="rounded-xl border border-[color:var(--border)] bg-[color:color-mix(in_oklab,var(--primary)_2%,white)] px-3 py-3 sm:px-4 text-xs text-[color:var(--muted)] break-words">
               <span className="font-bold text-[color:var(--primary)]">Execution order:</span>{" "}
               {segments
                 .filter((s) => s.processId !== IDLE_PROCESS_ID)

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   description: "Student project CPU Scheduling Simulator (FCFS, SJF, SRTF) with metrics and Gantt chart.",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,36 +32,25 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <div className="min-h-dvh flex flex-col">
+      <body className="min-h-full flex flex-col overflow-x-hidden">
+        <div className="min-h-dvh flex flex-col min-w-0">
           <header className="border-b border-[color:var(--border)] bg-white">
-            <div className="mx-auto w-full max-w-7xl px-6 py-5">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex flex-col">
-                  <span className="text-sm font-semibold tracking-wide text-[color:var(--muted)]">
+            <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-5">
+              <div className="flex items-start sm:items-center justify-between gap-3 sm:gap-4 min-w-0">
+                <div className="flex flex-col min-w-0">
+                  <span className="text-xs sm:text-sm font-semibold tracking-wide text-[color:var(--muted)]">
                     Academic Dashboard
                   </span>
-                  <h1 className="text-2xl font-bold tracking-tight text-[color:var(--primary)]">
+                  <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[color:var(--primary)] break-words">
                     CPU Scheduling Simulator
                   </h1>
-                </div>
-                <div className="hidden sm:flex items-center gap-2">
-                  <span className="rounded-full border border-[color:var(--border)] bg-white px-3 py-1 text-xs font-semibold text-[color:var(--primary)]">
-                    FCFS
-                  </span>
-                  <span className="rounded-full border border-[color:var(--border)] bg-white px-3 py-1 text-xs font-semibold text-[color:var(--primary)]">
-                    SJF
-                  </span>
-                  <span className="rounded-full border border-[color:var(--border)] bg-white px-3 py-1 text-xs font-semibold text-[color:var(--primary)]">
-                    SRTF
-                  </span>
                 </div>
               </div>
             </div>
           </header>
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 min-w-0">{children}</main>
           <footer className="border-t border-[color:var(--border)] bg-white">
-            <div className="mx-auto w-full max-w-7xl px-6 py-4 text-xs text-[color:var(--muted)]">
+            <div className="mx-auto w-full max-w-7xl px-4 py-3 sm:px-6 sm:py-4 text-xs text-[color:var(--muted)] leading-relaxed">
               CPU Scheduling Simulator • Built with Next.js, TypeScript, and Tailwind CSS
             </div>
           </footer>

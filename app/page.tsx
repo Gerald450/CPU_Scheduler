@@ -12,12 +12,18 @@ const defaultSample: ProcessInput[] = [
   { processId: "P3", arrivalTime: 4, burstTime: 1 },
 ];
 
+const defaultEmpty: ProcessInput[] = [
+  { processId: "", arrivalTime: Number.NaN, burstTime: Number.NaN },
+  { processId: "", arrivalTime: Number.NaN, burstTime: Number.NaN },
+  { processId: "", arrivalTime: Number.NaN, burstTime: Number.NaN },
+];
+
 function ensureCount(list: ProcessInput[], count: number): ProcessInput[] {
   const n = Math.max(1, Math.min(20, Math.floor(count || 1)));
   const next = list.slice(0, n);
   while (next.length < n) {
     const idx = next.length + 1;
-    next.push({ processId: `P${idx}`, arrivalTime: 0, burstTime: 1 });
+    next.push({ processId: "", arrivalTime: Number.NaN, burstTime: Number.NaN });
   }
   return next;
 }
@@ -27,7 +33,7 @@ type FieldErrors = Record<string, string>;
 export default function Home() {
   const [processCount, setProcessCount] = useState<number>(3);
   const [processCountInput, setProcessCountInput] = useState<string>("3");
-  const [processData, setProcessData] = useState<ProcessInput[]>(defaultSample);
+  const [processData, setProcessData] = useState<ProcessInput[]>(defaultEmpty);
   const [algorithm, setAlgorithm] = useState<ApiAlgorithm>("RECOMMENDED");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [apiError, setApiError] = useState<string | null>(null);
@@ -108,7 +114,7 @@ export default function Home() {
   function resetAll() {
     setProcessCount(3);
     setProcessCountInput("3");
-    setProcessData(defaultSample);
+    setProcessData(defaultEmpty);
     setAlgorithm("RECOMMENDED");
     setFieldErrors({});
     setApiError(null);
@@ -118,9 +124,9 @@ export default function Home() {
 
   return (
     <>
-      <div className="mx-auto w-full max-w-7xl px-6 py-10">
-        <div className="flex justify-center">
-          <div className="w-full max-w-3xl">
+      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-10 min-w-0">
+        <div className="flex justify-center min-w-0">
+          <div className="w-full max-w-3xl min-w-0">
             <ProcessInputForm
               processCountInput={processCountInput}
               processData={safeProcessData}
@@ -171,7 +177,7 @@ export default function Home() {
               }}
             />
             {apiError ? (
-              <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+              <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 break-words">
                 {apiError}
               </div>
             ) : null}
@@ -180,19 +186,19 @@ export default function Home() {
       </div>
 
       {result ? (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-50 flex flex-col min-h-0">
           <div
             className="absolute inset-0 bg-black/35 backdrop-blur-[2px]"
             onClick={() => setResult(null)}
           />
-          <div className="absolute inset-0 overflow-y-auto">
-            <div className="min-h-full px-4 py-10 flex items-start justify-center">
-              <div className="w-full max-w-6xl">
-                <div className="flex items-center justify-end mb-3">
+          <div className="relative flex-1 min-h-0 overflow-y-auto overscroll-y-contain touch-pan-y">
+            <div className="min-h-full px-3 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:px-4 sm:py-8 flex items-start justify-center">
+              <div className="w-full max-w-6xl min-w-0">
+                <div className="flex items-center justify-end mb-2 sm:mb-3 sticky top-0 z-10 -mx-1 px-1 py-2 sm:static sm:mx-0 sm:px-0 sm:py-0 bg-[color:var(--background)]/90 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none rounded-b-xl sm:rounded-none">
                   <button
                     type="button"
                     onClick={() => setResult(null)}
-                    className="rounded-xl border border-[color:var(--border)] bg-white px-4 py-2 text-sm font-extrabold text-[color:var(--primary)] hover:border-[color:var(--primary)] transition"
+                    className="rounded-xl border border-[color:var(--border)] bg-white px-4 py-2 text-sm font-extrabold text-[color:var(--primary)] hover:border-[color:var(--primary)] transition shadow-sm"
                   >
                     Close
                   </button>
@@ -203,7 +209,6 @@ export default function Home() {
                     setAlgorithm(a);
                     void runSimulation(a);
                   }}
-                  onReset={resetAll}
                   isRunning={isRunning}
                   data={result}
                 />

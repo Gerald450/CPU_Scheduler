@@ -20,11 +20,10 @@ cpu_scheduler/
     AlgorithmSelector.tsx          # algorithm picker (cards/select)
     GanttChart.tsx                 # gantt segments visualization + execution order
     MetricsTable.tsx               # per-process table (AT/BT/CT/WT/TAT/RT)
-    PowerBIDashboard.tsx           # placeholder embed panel
     ProcessInputForm.tsx           # input form + validation display
     RecommendationCard.tsx         # recommendation reason panel
     ResultPanel.tsx                # results dashboard (summary, tables, gantt, etc.)
-    SummaryCards.tsx               # averages cards (Average WT/TAT/RT)
+    SummaryCards.tsx               # averages cards (Average WT/TAT/RT + Throughput)
   lib/
     algorithms/
       _shared.ts                   # shared helpers + metric formulas
@@ -116,6 +115,7 @@ type SimulationResult = {
     averageWaitingTime: number;
     averageTurnaroundTime: number;
     averageResponseTime: number;
+    throughput: number;
   };
 };
 
@@ -151,7 +151,7 @@ The UI (`app/page.tsx` + `components/ResultPanel.tsx`) displays:
 
 - **Selected/Recommended algorithm**: `selectedAlgorithm`
 - **Recommendation text**: `recommendationReason`
-- **Summary cards**: `result.averages` (Average WT/TAT/RT)
+- **Summary cards**: `result.averages` (Average WT/TAT/RT + Throughput)
 - **Metrics table**: `result.metrics` with per-process CT/WT/TAT/RT
 - **Gantt chart**: `result.ganttChartSegments`
 - **Execution order**: derived from `ganttChartSegments` by collapsing consecutive duplicates (ignoring IDLE)
@@ -213,6 +213,19 @@ Given \(n\) processes:
 \quad
 \text{Average RT} = \frac{1}{n}\sum \text{RT}
 \]
+
+### Throughput
+
+Throughput is computed as:
+
+\[
+\text{Throughput} = \frac{n}{\max(1, \text{End} - \text{Start})}
+\]
+
+Where:
+- \(n\) is the number of processes
+- \(\text{Start}\) is the minimum arrival time in the dataset
+- \(\text{End}\) is the end time of the final (compressed) Gantt segment
 
 ### Rounding behavior
 

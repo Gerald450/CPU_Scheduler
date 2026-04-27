@@ -71,6 +71,10 @@ export function computeMetricsFromSegments(
   const avgRT = metrics.reduce((s, m) => s + m.responseTime, 0) / n;
 
   const ganttChartSegments = compressSegments(segments);
+  const startTime = Math.min(...processData.map((p) => p.arrivalTime));
+  const endTime = getLastEnd(ganttChartSegments);
+  const totalTime = Math.max(1, endTime - startTime);
+  const throughput = n / totalTime;
 
   return {
     algorithm,
@@ -81,6 +85,7 @@ export function computeMetricsFromSegments(
       averageWaitingTime: round2(avgWT),
       averageTurnaroundTime: round2(avgTAT),
       averageResponseTime: round2(avgRT),
+      throughput: round2(throughput),
     },
   };
 }

@@ -20,17 +20,17 @@ export function AlgorithmRatings({
   ];
 
   return (
-    <div className="rounded-2xl border border-[color:var(--border)] bg-white shadow-sm">
-      <div className="px-5 py-4 border-b border-[color:var(--border)]">
+    <div className="rounded-2xl border border-[color:var(--border)] bg-white shadow-sm min-w-0">
+      <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-[color:var(--border)]">
         <h3 className="text-sm font-bold text-[color:var(--primary)]">Algorithm Rating</h3>
       </div>
-      <div className="p-5 grid gap-3">
+      <div className="p-4 sm:p-5 grid gap-3 min-w-0">
         {rows.map((r) => (
-          <div key={r.algo} className="flex items-center justify-between">
-            <div className="text-sm font-extrabold text-[color:var(--primary)]">{r.algo}</div>
+          <div key={r.algo} className="flex flex-wrap items-center justify-between gap-2 min-w-0">
+            <div className="text-sm font-extrabold text-[color:var(--primary)] shrink-0">{r.algo}</div>
             <span
               className={[
-                "rounded-full border px-3 py-1 text-xs font-extrabold tracking-wide",
+                "rounded-full border px-2.5 py-1 sm:px-3 text-[11px] sm:text-xs font-extrabold tracking-wide shrink-0 max-w-full text-center",
                 badgeClass(r.rating),
               ].join(" ")}
             >

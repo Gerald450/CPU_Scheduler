@@ -29,6 +29,7 @@ export type SimulationResult = {
     averageWaitingTime: number;
     averageTurnaroundTime: number;
     averageResponseTime: number;
+    throughput: number;
   };
 };
 

@@ -20,7 +20,7 @@ export function AlgorithmSelector({
 }) {
   if (variant === "select") {
     return (
-      <div className="rounded-2xl border border-[color:var(--border)] bg-white px-4 py-3 shadow-sm">
+      <div className="rounded-2xl border border-[color:var(--border)] bg-white px-3 py-3 sm:px-4 shadow-sm min-w-0">
         <div className="grid gap-2">
           <label className="text-xs font-bold text-[color:var(--primary)]">{label}</label>
           <select
@@ -43,11 +43,11 @@ export function AlgorithmSelector({
   }
 
   return (
-    <div className="rounded-2xl border border-[color:var(--border)] bg-white shadow-sm">
-      <div className="px-5 py-4 border-b border-[color:var(--border)]">
+    <div className="rounded-2xl border border-[color:var(--border)] bg-white shadow-sm min-w-0">
+      <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-[color:var(--border)]">
         <h3 className="text-sm font-bold text-[color:var(--primary)]">{label}</h3>
       </div>
-      <div className="p-5 grid gap-3">
+      <div className="p-4 sm:p-5 grid gap-3 min-w-0">
         {options.map((opt) => {
           const selected = value === opt.value;
           return (
@@ -56,18 +56,18 @@ export function AlgorithmSelector({
               type="button"
               onClick={() => onChange(opt.value)}
               className={[
-                "text-left rounded-xl border px-4 py-3 transition",
+                "text-left rounded-xl border px-3 py-3 sm:px-4 transition min-w-0",
                 selected
-                  ? "border-[color:var(--primary)] bg-[color:color-mix(in_oklab,var(--accent)_18%,white)] ring-2 ring-[color:color-mix(in_oklab,var(--accent)_55%,transparent)] ring-offset-2 ring-offset-white"
+                  ? "border-[color:var(--primary)] bg-[color:color-mix(in_oklab,var(--accent)_18%,white)] ring-2 ring-[color:color-mix(in_oklab,var(--accent)_55%,transparent)] ring-offset-0 sm:ring-offset-2 sm:ring-offset-white"
                   : "border-[color:var(--border)] bg-white hover:border-[color:color-mix(in_oklab,var(--primary)_45%,transparent)]",
               ].join(" ")}
             >
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <div className="text-sm font-extrabold tracking-wide text-[color:var(--primary)]">
+              <div className="flex items-start justify-between gap-2 sm:gap-3 min-w-0">
+                <div className="min-w-0">
+                  <div className="text-sm font-extrabold tracking-wide text-[color:var(--primary)] break-words">
                     {opt.label}
                   </div>
-                  <div className="text-xs text-[color:var(--muted)] mt-0.5">{opt.hint}</div>
+                  <div className="text-xs text-[color:var(--muted)] mt-0.5 break-words">{opt.hint}</div>
                 </div>
                 <div
                   className={[

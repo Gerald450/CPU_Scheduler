@@ -5,7 +5,7 @@ type FieldErrors = Record<string, string>;
 
 function inputClass(hasError: boolean) {
   return [
-    "w-full rounded-xl border bg-white px-3 py-2 text-sm outline-none transition",
+    "w-full min-w-0 rounded-xl border bg-white px-3 py-2 text-sm outline-none transition",
     hasError
       ? "border-red-300 ring-2 ring-red-100"
       : "border-[color:var(--border)] focus:ring-2 focus:ring-[color:color-mix(in_oklab,var(--accent)_50%,transparent)] focus:border-[color:var(--primary)]",
@@ -41,8 +41,8 @@ export function ProcessInputForm({
 }) {
   return (
     <div className="grid gap-5">
-      <div className="rounded-2xl border border-[color:var(--border)] bg-white shadow-sm">
-        <div className="px-5 py-4 border-b border-[color:var(--border)]">
+      <div className="rounded-2xl border border-[color:var(--border)] bg-white shadow-sm min-w-0">
+        <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-[color:var(--border)]">
           <h2 className="text-base font-extrabold tracking-tight text-[color:var(--primary)]">
             How many processes do you have?
           </h2>
@@ -50,10 +50,10 @@ export function ProcessInputForm({
             Adjust the count to generate rows. Inputs are preserved when switching algorithms.
           </p>
         </div>
-        <div className="p-5 grid gap-4">
+        <div className="p-4 sm:p-5 grid gap-4 min-w-0">
           <div>
             <label className="text-xs font-bold text-[color:var(--primary)]">Number of Processes</label>
-            <div className="mt-2 flex items-center gap-3">
+            <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
               <input
                 type="number"
                 min={1}
@@ -61,12 +61,12 @@ export function ProcessInputForm({
                 value={processCountInput}
                 onChange={(e) => onProcessCountInputChange(e.target.value)}
                 onBlur={onProcessCountInputBlur}
-                className={inputClass(Boolean(fieldErrors["processCount"]))}
+                className={`${inputClass(Boolean(fieldErrors["processCount"]))} sm:flex-1`}
               />
               <button
                 type="button"
                 onClick={onLoadSample}
-                className="shrink-0 rounded-xl border border-[color:var(--border)] bg-white px-4 py-2 text-sm font-bold text-[color:var(--primary)] hover:border-[color:var(--primary)] transition"
+                className="w-full sm:w-auto shrink-0 rounded-xl border border-[color:var(--border)] bg-white px-4 py-2 text-sm font-bold text-[color:var(--primary)] hover:border-[color:var(--primary)] transition"
               >
                 Load Sample
               </button>
@@ -146,19 +146,19 @@ export function ProcessInputForm({
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
             <button
               type="button"
               onClick={() => onRun()}
               disabled={isRunning}
-              className="flex-1 rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-extrabold text-white shadow-sm hover:opacity-95 disabled:opacity-60 transition"
+              className="w-full sm:flex-1 rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-extrabold text-white shadow-sm hover:opacity-95 disabled:opacity-60 transition"
             >
               {isRunning ? "Running..." : "Run Simulation"}
             </button>
             <button
               type="button"
               onClick={onReset}
-              className="rounded-xl border border-[color:var(--border)] bg-white px-4 py-3 text-sm font-extrabold text-[color:var(--primary)] hover:border-[color:var(--primary)] transition"
+              className="w-full sm:w-auto shrink-0 rounded-xl border border-[color:var(--border)] bg-white px-4 py-3 text-sm font-extrabold text-[color:var(--primary)] hover:border-[color:var(--primary)] transition"
             >
               Reset
             </button>

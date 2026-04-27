@@ -8,7 +8,6 @@ Student project web application for simulating CPU scheduling algorithms with a 
 - **Algorithms**: FCFS (non-preemptive), SJF (non-preemptive), SRTF (preemptive), and **Recommended**
 - **Outputs**: execution order, Gantt chart, per-process metrics, average metrics
 - **Recommended mode**: runs FCFS/SJF/SRTF on the same dataset and selects the best algorithm by lowest averages
-- **Power BI section**: polished embedded dashboard placeholder (`components/PowerBIDashboard.tsx`)
 
 ### Tech stack
 
@@ -37,7 +36,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - `srtf.ts`
   - `recommend.ts`
 - `lib/utils/validation.ts`: validation for both frontend and backend
-- `components/`: modular UI building blocks (Gantt, tables, ratings, Power BI card)
+- `components/`: modular UI building blocks (Gantt, tables, etc.)
 
 ### Where algorithm logic lives
 
@@ -51,9 +50,5 @@ Theme variables live in `app/globals.css`:
 
 - `--primary`: `#032A64`
 - `--accent`: `#36E9FD`
-
-### How to embed a real Power BI dashboard later
-
-Edit `components/PowerBIDashboard.tsx` to pass an `embedUrl` and it will render an `<iframe>` instead of the placeholder.
 
 # CPU_Scheduler
